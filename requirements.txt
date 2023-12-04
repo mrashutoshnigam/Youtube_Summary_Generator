@@ -5,3 +5,4 @@ tiktoken
 pytube
 Replicate
 transformers>=4.31.0
+flask
