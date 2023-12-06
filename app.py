@@ -35,5 +35,20 @@ def home_post():
     return render_template('index.html', summary=summary)
 
 
+@app.route("/get_summary")
+def get_summary():
+    youtube_url = request.args['url']
+    youtube = Youtube()
+    summary = youtube.generate_summary(youtube_url)
+    return summary
+
+
+@app.route("/get_thumbnail")
+def get_thumbnail():
+    youtube_url = request.args['url']
+    youtube = Youtube()
+    summary = youtube.load_video_info(youtube_url)
+    return summary
+
 if __name__ == "__main__":
     app.run(debug=True)

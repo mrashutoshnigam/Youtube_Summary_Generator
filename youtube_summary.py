@@ -16,16 +16,9 @@ class Youtube:
 
     def load_youtube_video(self, url):
         loader = YoutubeLoader.from_youtube_url(
-            url, add_video_info=True
+            url
         )
         self.docs = loader.load()
-        self.video = {
-            "title": self.docs[0].metadata['title'],
-            "thumbnail_url": self.docs[0].metadata['thumbnail_url'],
-            "publish_date": self.docs[0].metadata['publish_date'],
-            "author": self.docs[0].metadata['author'],
-            "page_content": self.docs[0].page_content
-        }
 
     def configure_llama(self):
         # enter your Replicate API token, or you can use local Llama. See README for more info
@@ -60,9 +53,7 @@ class Youtube:
     def generate_summary(self, youtube_url):
         self.load_youtube_video(youtube_url)
         self.configure_llama()
-        print(self.docs[0].page_content)
-        self.video['summary'] = ''  # self.entire_summary()
-        return self.video
+        return self.entire_summary()
 
     def use_local(self):
         callback_manager = CallbackManager([StreamingStdOutCallbackHandler()])
@@ -71,3 +62,17 @@ class Youtube:
             # n_ctx=6000,
             max_tokens=32,
             verbose=True)
+
+    def load_video_info(self, url):
+        loader = YoutubeLoader.from_youtube_url(
+            url, add_video_info=True
+        )
+        docs = loader.load()
+        video = {
+            "title": docs[0].metadata['title'],
+            "thumbnail_url": docs[0].metadata['thumbnail_url'],
+            "publish_date": docs[0].metadata['publish_date'],
+            "author": docs[0].metadata['author'],
+            "page_content": docs[0].page_content[:100]
+        }
+        return video
