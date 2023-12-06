@@ -1,6 +1,47 @@
 {% extends "base.html" %}
 {% block title %}Home Page{% endblock %}
 {% block content %}
-<h1>Test</h1>
-<h3>{{ utc_dt }}</h3>
+    <div class="container px-4" style="margin-top: 40px">
+        <div class="row gx-5">
+            <div class="col">
+                <div class="p-3 border bg-light">
+                    <form class="form" action="/" method="POST">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">Youtube Video URL</span>
+                            <input type="text" class="form-control" id="tbox_youtube_url" name="tbox_youtube_url"
+                                   placeholder="Youtube Video URL" aria-label="Youtube URL"
+                                   aria-describedby="basic-addon1">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-danger">
+                            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                            Generate Summary
+                        </button>
+                    </form>
+
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        Summary
+                    </div>
+                    <div class="card-body" style="margin-top: 10px">
+                        <p class="card-text">{% print(summary['summary']) %}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="p-3 border bg-light">
+                    <div class="card">
+                        <img src="{% print(summary['thumbnail_url']) %}" class="card-img-top"
+                             alt="{% print(summary['title']) %}">
+                        <div class="card-body">
+                            <h5 class="card-title">{% print(summary['title']) %}</h5>
+                            <p class="card-text">{% print(summary['page_content'][:100]) %}</p>
+                            <a href="#" class="btn btn-primary">{% print(summary['publish_date']) %}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}

@@ -9,13 +9,30 @@
 
 
 import datetime
-from flask import Flask, redirect, url_for, render_template
+from flask import Flask, redirect, url_for, render_template, request
+from youtube_summary import Youtube
 
 app = Flask(__name__)
 
-@app.route("/")
+
+@app.route("/", methods=['GET'])
 def home():
-    return render_template("index.html")
+    return render_template("index.html", summary={
+        "title": 'title',
+        "thumbnail_url": 'thumbnail_url',
+        "publish_date": 'publish_date',
+        "author": 'author',
+        "page_content": '',
+        "summary": ''
+    })
+
+
+@app.route("/", methods=['POST'])
+def home_post():
+    youtube_url = request.form.get('tbox_youtube_url')
+    youtube = Youtube()
+    summary = youtube.generate_summary(youtube_url)
+    return render_template('index.html', summary=summary)
 
 
 if __name__ == "__main__":

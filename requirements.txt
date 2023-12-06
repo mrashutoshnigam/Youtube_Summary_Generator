@@ -6,3 +6,8 @@ pytube
 Replicate
 transformers>=4.31.0
 flask
+llama-cpp-python
+pypdf
+sentence-transformers 
+chromadb 
+langchain
