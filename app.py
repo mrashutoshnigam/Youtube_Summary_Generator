@@ -50,5 +50,6 @@ def get_thumbnail():
     summary = youtube.load_video_info(youtube_url)
     return summary
 
+
 if __name__ == "__main__":
     app.run(debug=True)

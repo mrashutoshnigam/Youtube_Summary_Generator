@@ -73,6 +73,6 @@ class Youtube:
             "thumbnail_url": docs[0].metadata['thumbnail_url'],
             "publish_date": docs[0].metadata['publish_date'],
             "author": docs[0].metadata['author'],
-            "page_content": docs[0].page_content[:100]
+            "page_content": docs[0].page_content
         }
         return video
