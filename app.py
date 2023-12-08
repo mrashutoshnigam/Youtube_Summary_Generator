@@ -18,12 +18,12 @@ app = Flask(__name__)
 @app.route("/", methods=['GET'])
 def home():
     return render_template("index.html", summary={
-        "title": 'title',
-        "thumbnail_url": 'thumbnail_url',
+        "title": 'SummarizeTube',
+        "thumbnail_url": url_for('static', filename='img/youtube_summary_banner.png'),
         "publish_date": 'publish_date',
-        "author": 'author',
-        "page_content": '',
-        "summary": ''
+        "author": 'ashutosh64@amityonline.com',
+        "page_content": 'Youtube Video Summary Generator',
+        "summary": 'Youtube Video Summary Generator'
     })
 
 

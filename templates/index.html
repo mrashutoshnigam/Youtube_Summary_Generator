@@ -36,9 +36,9 @@
                              alt="{% print(summary['title']) %}">
                         <div class="card-body">
                             <h5 class="card-title" id="card_title">{% print(summary['title']) %}</h5>
-                            <div class="badge bg-danger text-wrap" id="card_date">
-                                {% print(summary['publish_date']) %}
-                            </div>
+                            <h6 class="card-subtitle mb-2 text-muted"
+                                id="card_date">{% print(summary['publish_date']) %}</h6>
+
                             <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button"
                                aria-expanded="false" aria-controls="collapseExample">
                                 Show Caption
