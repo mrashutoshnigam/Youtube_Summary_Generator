@@ -1,7 +1,13 @@
+import datetime
+
 from flask import Blueprint
 from flask import url_for, render_template, request
 from flask_login import login_required, current_user
+from sqlalchemy import desc
+
 from youtube_summary import Youtube
+from models import VideoLib
+from app import db
 
 main = Blueprint('main', __name__)
 
@@ -9,7 +15,9 @@ main = Blueprint('main', __name__)
 @main.route('/profile')
 @login_required
 def profile():
-    return render_template('profile.html', name=current_user.name)
+    user_id = current_user.id
+    video_info = VideoLib.query.filter_by(user_id=user_id).order_by(desc(VideoLib.search_date)).all()
+    return render_template('profile.html', name=current_user.name, video_info=video_info)
 
 
 @main.route("/", methods=['GET'])
@@ -26,16 +34,18 @@ def home():
 
 
 @main.route("/get_summary")
-@login_required
 def get_summary():
     youtube_url = request.args['url']
     youtube = Youtube()
-    summary = youtube.generate_summary(youtube_url)
-    return summary
+    videoInfo = youtube.generate_summary(youtube_url)
+    video = VideoLib(user_id=current_user.id, video_url=youtube_url, title=videoInfo['title'],
+                     summary=videoInfo['summary'])
+    db.session.add(video)
+    db.session.commit()
+    return videoInfo["summary"]
 
 
 @main.route("/get_thumbnail")
-@login_required
 def get_thumbnail():
     youtube_url = request.args['url']
     youtube = Youtube()

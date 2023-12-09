@@ -23,7 +23,7 @@ login_manager.init_app(app)
 
 with app.app_context():
     db.create_all()
-app.run(debug=False)
+app.run()
 
 
 @login_manager.user_loader
