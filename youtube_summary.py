@@ -12,7 +12,7 @@ from langchain.prompts import ChatPromptTemplate
 
 class Youtube:
     def __init__(self):
-        pass
+        self.docs = None
 
     def load_youtube_video(self, url):
         loader = YoutubeLoader.from_youtube_url(
@@ -51,9 +51,11 @@ class Youtube:
         return summary
 
     def generate_summary(self, youtube_url):
-        self.load_youtube_video(youtube_url)
+        # self.load_youtube_video(youtube_url)
+        videoInfo = self.load_video_info(youtube_url)
         self.configure_llama()
-        return self.entire_summary()
+        videoInfo["summary"] = self.entire_summary()
+        return videoInfo
 
     def use_local(self):
         callback_manager = CallbackManager([StreamingStdOutCallbackHandler()])
@@ -68,11 +70,15 @@ class Youtube:
             url, add_video_info=True
         )
         docs = loader.load()
-        video = {
-            "title": docs[0].metadata['title'],
-            "thumbnail_url": docs[0].metadata['thumbnail_url'],
-            "publish_date": docs[0].metadata['publish_date'],
-            "author": docs[0].metadata['author'],
-            "page_content": docs[0].page_content
-        }
+        self.docs = docs
+        if docs is not None and len(self.docs) > 0:
+            video = {
+                "title": docs[0].metadata['title'],
+                "thumbnail_url": docs[0].metadata['thumbnail_url'],
+                "publish_date": docs[0].metadata['publish_date'],
+                "author": docs[0].metadata['author'],
+                "page_content": docs[0].page_content
+            }
+        else:
+            video = None
         return video

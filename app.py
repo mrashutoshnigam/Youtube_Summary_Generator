@@ -1,55 +1,32 @@
-# from flask import Flask
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
 
-# app = Flask(__name__)
+# init SQLAlchemy so we can use it later in our models
 
-
-# @app.route('/')
-# def hello():
-#     return 'Hello, World!'
-
-
-import datetime
-from flask import Flask, redirect, url_for, render_template, request
-from youtube_summary import Youtube
 
 app = Flask(__name__)
 
+app.config['SECRET_KEY'] = 'secret-key-goes-here'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
+db = SQLAlchemy(app)
+from main import main as main_blueprint
+from auth import auth as auth_blueprint
+from models import User
 
-@app.route("/", methods=['GET'])
-def home():
-    return render_template("index.html", summary={
-        "title": 'SummarizeTube',
-        "thumbnail_url": url_for('static', filename='img/youtube_summary_banner.png'),
-        "publish_date": 'publish_date',
-        "author": 'ashutosh64@amityonline.com',
-        "page_content": 'Youtube Video Summary Generator',
-        "summary": 'Youtube Video Summary Generator'
-    })
+app.register_blueprint(auth_blueprint)
+app.register_blueprint(main_blueprint)
 
+login_manager = LoginManager()
+login_manager.login_view = 'auth.login'
+login_manager.init_app(app)
 
-@app.route("/", methods=['POST'])
-def home_post():
-    youtube_url = request.form.get('tbox_youtube_url')
-    youtube = Youtube()
-    summary = youtube.generate_summary(youtube_url)
-    return render_template('index.html', summary=summary)
+with app.app_context():
+    db.create_all()
+app.run()
 
 
-@app.route("/get_summary")
-def get_summary():
-    youtube_url = request.args['url']
-    youtube = Youtube()
-    summary = youtube.generate_summary(youtube_url)
-    return summary
-
-
-@app.route("/get_thumbnail")
-def get_thumbnail():
-    youtube_url = request.args['url']
-    youtube = Youtube()
-    summary = youtube.load_video_info(youtube_url)
-    return summary
-
-
-if __name__ == "__main__":
-    app.run(debug=True)
+@login_manager.user_loader
+def load_user(user_id):
+    # since the user_id is just the primary key of our user table, use it in the query for the user
+    return User.query.get(int(user_id))
