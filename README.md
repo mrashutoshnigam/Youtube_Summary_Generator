@@ -53,3 +53,9 @@ The application will display a summary of the video.
 ### License
 
 This project is licensed under the MIT License. See the LICENSE file for more information.
+
+![Alt text](/UI%20Images/SCR-20231212-bdhu.png?raw=true "Home Page")
+![Alt text](/UI%20Images/SCR-20231212-bdos.png?raw=true "Exaple of Summary")
+![Alt text](/UI%20Images/SCR-20231212-bdrk.png?raw=true "History")
+![Alt text](/UI%20Images/SCR-20231212-bdua.png?raw=true "Login Page")
+![Alt text](/UI%20Images/SCR-20231212-bdwu.png?raw=true "Sign-up Page")
